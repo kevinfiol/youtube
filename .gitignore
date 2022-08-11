@@ -1,0 +1,4 @@
+dist/*
+!dist/.keep
+src/data.json
+node_modules
