@@ -104,9 +104,11 @@ export async function render() {
         return a < b ? 1 : -1;
     });
 
+    const now = NOW.toString();
+
     const source = readFileSync(resolve(INPUT_TEMPLATE), { encoding: 'utf8' });
     const template = compile(source, { localsName: 'it' });
-    const html = template({ videos, days });
+    const html = template({ videos, days, now });
     writeFileSync(resolve(OUTPUT_FILE), html, { encoding: 'utf8' });
 }
 
