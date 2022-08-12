@@ -104,7 +104,7 @@ export async function render() {
         return a < b ? 1 : -1;
     });
 
-    const now = NOW.toString();
+    const now = NOW.toString().split('(')[0].trim();
 
     const source = readFileSync(resolve(INPUT_TEMPLATE), { encoding: 'utf8' });
     const template = compile(source, { localsName: 'it' });
