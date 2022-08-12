@@ -1,0 +1,87 @@
+:root {
+  --font-size: 14px;
+
+  --color: #111;
+  --bg-color: #fffff8;
+  --faded-bg: #f9f9f2;
+
+  --title-font-size: 16px;
+  --title-font-weight: 600;
+
+  --main-padding-right: 8rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color: #ddd;
+    --bg-color: #151515;
+    --faded-bg: #1b1b1b;
+  }
+}
+
+body {
+  color: var(--color);
+  background-color: var(--bg-color);
+  max-width: 1200px;
+  padding: 0 2rem;
+  margin: 0 auto;
+  font-family: monospace;
+  font-size: var(--font-size);
+}
+
+header {
+  padding: 3rem 0;
+}
+
+h1, h2, h3 {
+  font-family: monospace;
+}
+
+a:link {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:visited {
+  color: #b58c8c;
+}
+
+a:hover {
+  opacity: .75;
+}
+
+p {
+  margin: 0;
+  padding: 0.25rem 0;
+}
+
+.day {
+  margin-bottom: 2rem;
+}
+
+.videos {
+  padding: 1rem 0;
+  gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.video > a > img {
+  width: 100%;
+  height: auto;
+}
+
+.github {
+  position:fixed;
+  bottom: 4px;
+  right: 4px;
+  opacity: 0.25;
+}
+
+.monospace {
+  font-family: monospace;
+}
+
+.inline {
+  display: inline;
+}
