@@ -24,15 +24,15 @@
           <div class="videos">
             <% for (let video of it.videos[day]) { %>
               <div class="video">
-                <a href="<%= video.link %>" target="_blank">
+                <a href="<%= video.link %>">
                   <img src="<%= video.thumbnail %>" loading="lazy" />
                 </a>
 
-                <a href="<%= video.link %>" target="_blank">
+                <a href="<%= video.link %>">
                   <p><%= video.title %></p>
                 </a>
 
-                <a href="<%= video.channel %>" target="_blank">
+                <a href="<%= video.channel %>">
                   <p><strong><%= video.author %></strong></p>
                 </a>
               </div>
