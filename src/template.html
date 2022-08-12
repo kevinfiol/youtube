@@ -8,6 +8,36 @@
   <link rel="stylesheet" href="./main.css">
 </head>
 <body>
-    <h1>youtube subs</h1>
+    <header>
+      <h1>youtube subs</h1>
+    </header>
+
+    <a class="github" href="https://github.com/kevinfiol/youtube_subs">[github]</a>
+
+    <main>
+      <% for (let day of it.days) { %>
+        <div class="day">
+          <h2><%= day %></h2>
+          <hr />
+          <div class="videos">
+            <% for (let video of it.videos[day]) { %>
+              <div class="video">
+                <a href="<%= video.link %>" target="_blank">
+                  <img src="<%= video.thumbnail %>" loading="lazy" />
+                </a>
+
+                <a href="<%= video.link %>" target="_blank">
+                  <p><%= video.title %></p>
+                </a>
+
+                <a href="<%= video.channel %>" target="_blank">
+                  <p><strong><%= video.author %></strong></p>
+                </a>
+              </div>
+            <% } %>
+          </div>
+        </div>
+      <% } %>
+    </main>
 </body>
 </html>

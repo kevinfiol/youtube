@@ -6,10 +6,15 @@ import Parser from 'rss-parser';
 import { compile } from 'yeahjs';
 
 const DEV = false;
+const WRITE_TEST_FILE = false;
+
 const FEEDS_JSON = 'src/feeds.json';
 const INPUT_TEMPLATE = 'src/template.html';
 const OUTPUT_FILE = 'dist/index.html';
+const TEST_FILE = 'src/data.json';
 const YOUTUBE_URL = 'yewtu.be';
+const NOW = getNowDate();
+const YEAR_IN_MS = 31536000000;
 
 const FEEDS = JSON.parse(readFileSync(resolve(FEEDS_JSON), { encoding: 'utf8' }));
 const PARSER = new Parser({
@@ -45,10 +50,10 @@ function parseFeed(response) {
 }
 
 export async function render() {
-    let videos = [];
+    let videos = {};
 
     if (DEV) {
-        // load from file
+        videos = JSON.parse(readFileSync(resolve(TEST_FILE)), { encoding: 'utf8' });
     } else {
         for (const feed of FEEDS) {
             try {
@@ -59,140 +64,55 @@ export async function render() {
                     : body;
 
                 contents.items.forEach(item => {
-                    videos.push({
+                    const pubDate = new Date(item.pubDate);
+                    const diffInMs = NOW - pubDate;
+
+                    // don't include videos more than a year old
+                    if (diffInMs > YEAR_IN_MS) return;
+
+                    const month = pubDate.getMonth() + 1;
+                    const date = pubDate.getDate();
+                    const dateStr = `${pubDate.getFullYear()}.${month < 10 ? `0${month}` : month}.${date < 10 ? `0${date}` : date}`;
+
+                    if (!videos[dateStr]) videos[dateStr] = [];
+
+                    videos[dateStr].push({
                         ...item,
+                        dateStr,
+                        link: `https://${YOUTUBE_URL}` + item.link.split('youtube.com')[1], // redirect
                         thumbnail: item.group['media:thumbnail'][0]['$'].url,
-                        channel: contents.link
+                        channel: `https://${YOUTUBE_URL}` + contents.link.split('youtube.com')[1] // redirect
                     });
                 });
             } catch (e) {
                 console.error(e);
             }
         }
+
+        if (WRITE_TEST_FILE) writeFileSync(resolve(TEST_FILE), JSON.stringify(videos), 'utf8');
     }
 
-    videos.sort((a, b) => {
-        return a.pubDate < b.pubDate ? 1 : -1;
+    for (let day in videos) {
+        // sort videos per day by pubDate
+        videos[day].sort((a, b) => {
+            return a.pubDate < b.pubDate ? 1 : -1;
+        });
+    }
+
+    // get a sorted list of days
+    const days = Object.keys(videos).sort((a, b) => {
+        return a < b ? 1 : -1;
     });
 
-    console.log(videos);
-
-    // const source = readFileSync(resolve(INPUT_TEMPLATE), { encoding: 'utf8' });
-    // const template = compile(source, { localsName: 'it' });
-    // const html = template();
-    // writeFileSync(resolve(OUTPUT_FILE), html, { encoding: 'utf8' });
+    const source = readFileSync(resolve(INPUT_TEMPLATE), { encoding: 'utf8' });
+    const template = compile(source, { localsName: 'it' });
+    const html = template({ videos, days });
+    writeFileSync(resolve(OUTPUT_FILE), html, { encoding: 'utf8' });
 }
 
-// (async () => {
-//     const contentFromAllFeeds = {};
-//     const errors = [];
-
-//     if (!DEV) {
-//         for (const group in feeds) {
-//             contentFromAllFeeds[group] = [];
-
-//             for (let index = 0; index < feeds[group].length; index++) {
-//                 try {
-//                     const response = await get(feeds[group][index]);
-//                     const body = parseFeed(response);
-//                     const contents =
-//                     typeof body === "string" ? await parser.parseString(body) : body;
-
-//                     contents.feed = feeds[group][index];
-//                     contents.title = contents.title ? contents.title : contents.link;
-//                     contentFromAllFeeds[group].push(contents);
-
-//                     // try to normalize date attribute naming
-//                     contents.items.forEach(item => {
-//                         const timestamp = new Date(item.pubDate || item.isoDate || item.date).getTime();
-//                         item.timestamp = isNaN(timestamp) ? (item.pubDate || item.isoDate || item.date) : timestamp;
-
-//                         const formattedDate = new Date(item.timestamp).toLocaleDateString()
-//                         item.timestamp = formattedDate !== 'Invalid Date' ? formattedDate : dateString;
-
-//                         // correct link url if lacks hostname
-//                         if (item.link && item.link.split('http').length == 1) {
-//                             let newLink;
-
-//                             if (contents.link.slice(-1) == '/' && item.link.slice(0, 1) == '/') {
-//                                 newLink = contents.link + item.link.slice(1);
-//                             } else {
-//                                 newLink = contents.link + item.link;
-//                             }
-
-//                             item.link = newLink;
-//                         }
-                        
-//                         // replace twitter links with nitter
-//                         let twitterMatch = matchTwitter(item.link);
-//                         if (twitterMatch) {
-//                             item.link = item.link.replace(twitterMatch, `://${NITTER_URL}/`);
-//                         }
-                        
-//                         // replace medium links with scribe.rip
-//                         if (item.link.indexOf('medium.com/') !== -1) {
-//                             item.link = `https://${MEDIUM_URL}/` + item.link;
-//                         }
-
-//                         // redirect youtube links to piped
-//                         if (item.link.indexOf('youtube.com/') !== -1) {
-//                             item.link = `https://${YOUTUBE_URL}` + item.link.split('youtube.com')[1];
-//                         }
-//                     });
-
-//                     // sort items
-//                     contents.items.sort((a, b) => {
-//                         const [aDate, bDate] = [parseDate(a), parseDate(b)];
-//                         if (!aDate || !bDate) return 0; 
-//                         return bDate - aDate;
-//                     });
-//                 } catch (error) {
-//                   console.error(error);
-//                   errors.push(feeds[group][index]);
-//                 }
-//           }
-//         }
-//     }
-
-//     let groups;
-
-//     if (DEV) {
-//         const testJson = JSON.parse(readFileSync(join(__dirname, './data.json'), { encoding: 'utf8' }));
-//         groups = Object.entries(testJson);
-//     } else {
-//         groups = Object.entries(contentFromAllFeeds);
-//         writeFileSync(join(__dirname, './data.json'), JSON.stringify(contentFromAllFeeds), 'utf8');
-//     }
-
-//     // sort feeds
-//     for (let i = 0, len = groups.length; i < len; i++) {
-//         // for each group, sort the feeds
-//         // sort the feeds by comparing the isoDate of the first items of each feed
-//         groups[i][1].sort((a, b) => {
-//             const [aDate, bDate] = [parseDate(a.items[0]), parseDate(b.items[0])];
-//             if (!aDate || !bDate) return 0; 
-//             return bDate - aDate;
-//         });
-//     }
-
-//     const now = getNowDate().toString();
-//     const html = render({ groups, now, errors });
-//     writeFileSync(join(__dirname, OUTPUT_FILE), html, { encoding: 'utf8' });
-// })();
-
-function parseDate(item) {
-    if (item) {
-        if (item.isoDate) return new Date(item.isoDate);
-        else if (item.pubDate) return new Date(item.pubDate);
-    }
-
-    return null;
-}
-
-function getNowDate(){
+function getNowDate() {
     //EST
     const offset = -4.0
-    
     let d = new Date();
     const utc = d.getTime() + (d.getTimezoneOffset() * 60000);
     d = new Date(utc + (3600000 * offset));
