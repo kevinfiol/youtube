@@ -55,7 +55,7 @@ export async function render() {
     if (DEV) {
         videos = JSON.parse(readFileSync(resolve(TEST_FILE)), { encoding: 'utf8' });
     } else {
-        for (const feed of FEEDS) {
+        for (const [_channel, feed] of FEEDS) {
             try {
                 const body = await get(feed).then(parseFeed);
                 
