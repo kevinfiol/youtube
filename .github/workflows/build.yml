@@ -4,9 +4,9 @@ on:
     branches:
       - main
   schedule:
-    # Run this script every 2 hrs
+    # Run this script every 1 hrs
     #  */m hr day month day_of_week
-    - cron:  '0 */2 * * *'
+    - cron:  '0 */1 * * *'
   workflow_dispatch:
     inputs:
       tags:
