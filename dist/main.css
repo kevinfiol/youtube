@@ -30,7 +30,7 @@ body {
 }
 
 header {
-  padding: 3rem 0;
+  padding: 1rem 0;
 }
 
 h1, h2, h3 {
@@ -53,6 +53,20 @@ a:hover {
 p {
   margin: 0;
   padding: 0.25rem 0;
+}
+
+.search {
+  margin-bottom: 4rem;
+}
+
+.text-input {
+  font-family: monospace;
+  background-color: var(--faded-bg);
+  padding: 1rem;
+  color: var(--color);
+  border: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .day {

@@ -107,9 +107,13 @@ export async function render() {
 
     const now = NOW.toString().split('(')[0].trim();
 
+    // search url
+    const searchUrl = `https://${YOUTUBE_URL}/search`;
+    console.log(searchUrl);
+
     const source = readFileSync(resolve(INPUT_TEMPLATE), { encoding: 'utf8' });
     const template = compile(source, { localsName: 'it' });
-    const html = template({ videos, days, now });
+    const html = template({ videos, days, now, searchUrl });
     writeFileSync(resolve(OUTPUT_FILE), html, { encoding: 'utf8' });
 }
 
