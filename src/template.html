@@ -28,13 +28,21 @@
                   <img src="<%= video.thumbnail %>" loading="lazy" />
                 </a>
 
-                <a href="<%= video.link %>">
-                  <p><%= video.title %></p>
-                </a>
+                <p>
+                  <a href="<%= video.link %>">
+                    <%= video.title %>
+                  </a>
+                </p>
 
-                <a href="<%= video.channel %>">
-                  <p><strong><%= video.author %></strong></p>
-                </a>
+                <p>
+                  <a href="<%= video.channel %>">
+                    <strong><%= video.author %>&nbsp;</strong>
+                  </a>
+
+                  <a href="<%= video.youtube %>">
+                    <span>(YT)</span>
+                  </a>
+                </p>
               </div>
             <% } %>
           </div>

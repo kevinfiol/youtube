@@ -79,6 +79,7 @@ export async function render() {
                     videos[dateStr].push({
                         ...item,
                         dateStr,
+                        youtube: item.link + '&redirect=false', // query param to use with kevinfiol/redirector
                         link: `https://${YOUTUBE_URL}` + item.link.split('youtube.com')[1], // redirect
                         thumbnail: item.group['media:thumbnail'][0]['$'].url,
                         channel: `https://${YOUTUBE_URL}` + contents.link.split('youtube.com')[1] // redirect
