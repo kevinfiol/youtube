@@ -11,7 +11,10 @@
     <header>
       <div class="search">
         <form action="<%= it.searchUrl %>" method="GET">
-          <input type="text" class="text-input" name="q" placeholder="search" />
+          <div class="input-group">
+            <input type="text" class="text-input" name="q" placeholder="search" />
+            <button type="submit">submit</button>
+          </div>
         </form>
       </div>
 

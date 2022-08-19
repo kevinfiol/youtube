@@ -99,3 +99,20 @@ p {
 .inline {
   display: inline;
 }
+
+.input-group {
+  display: flex;
+}
+
+button {
+  font-family: monospace;
+  border: 1px solid var(--faded-bg);
+  background-color: var(--bg-color);
+  color: var(--color);
+  padding: 0 1rem;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: var(--faded-bg);
+}

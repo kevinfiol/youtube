@@ -109,7 +109,6 @@ export async function render() {
 
     // search url
     const searchUrl = `https://${YOUTUBE_URL}/search`;
-    console.log(searchUrl);
 
     const source = readFileSync(resolve(INPUT_TEMPLATE), { encoding: 'utf8' });
     const template = compile(source, { localsName: 'it' });
