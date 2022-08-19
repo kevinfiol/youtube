@@ -114,5 +114,5 @@ button {
 }
 
 button:hover {
-  background-color: var(--faded-bg);
+  background-color: var(--bg-color);
 }
