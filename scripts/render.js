@@ -5,9 +5,6 @@ import { get } from 'httpie';
 import Parser from 'rss-parser';
 import { compile } from 'yeahjs';
 
-const DEV = false;
-const WRITE_TEST_FILE = false;
-
 const FEEDS_JSON = 'src/feeds.json';
 const INPUT_TEMPLATE = 'src/template.html';
 const OUTPUT_FILE = 'dist/index.html';
@@ -49,10 +46,10 @@ function parseFeed(response) {
     return false;
 }
 
-export async function render() {
+export async function render(dev = false, write = false) {
     let videos = {};
 
-    if (DEV) {
+    if (dev) {
         videos = JSON.parse(readFileSync(resolve(TEST_FILE)), { encoding: 'utf8' });
     } else {
         for (const [_channel, feed] of FEEDS) {
@@ -90,7 +87,7 @@ export async function render() {
             }
         }
 
-        if (WRITE_TEST_FILE) writeFileSync(resolve(TEST_FILE), JSON.stringify(videos), 'utf8');
+        if (write) writeFileSync(resolve(TEST_FILE), JSON.stringify(videos), 'utf8');
     }
 
     for (let day in videos) {
