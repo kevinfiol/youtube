@@ -9,7 +9,7 @@ const FEEDS_JSON = 'src/feeds.json';
 const INPUT_TEMPLATE = 'src/template.html';
 const OUTPUT_FILE = 'dist/index.html';
 const TEST_FILE = 'src/data.json';
-const YOUTUBE_URL = 'vid.puffyan.us';
+const YOUTUBE_URL = 'yewtu.be';
 const NOW = getNowDate();
 const YEAR_IN_MS = 31536000000;
 
