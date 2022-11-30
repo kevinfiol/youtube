@@ -1,6 +1,6 @@
 import servbot from 'servbot';
 import { watch } from 'watchlist';
-import { render } from './render.js';
+import { render } from '../src/render.js';
 
 const dev = true;
 const write = process.argv.includes('-w');
