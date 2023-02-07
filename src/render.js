@@ -105,7 +105,7 @@ export async function render(dev = false, write = false) {
     const now = NOW.toString().split('(')[0].trim();
 
     // search url
-    const searchUrl = `https://${YOUTUBE_URL}/search`;
+    const searchUrl = `https://${YOUTUBE_URL}/results`;
 
     const source = readFileSync(resolve(INPUT_TEMPLATE), { encoding: 'utf8' });
     const template = compile(source, { localsName: 'it' });
