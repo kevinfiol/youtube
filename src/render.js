@@ -9,7 +9,7 @@ const FEEDS_JSON = 'src/feeds.json';
 const INPUT_TEMPLATE = 'src/template.html';
 const OUTPUT_FILE = 'dist/index.html';
 const TEST_FILE = 'src/data.json';
-const YOUTUBE_URL = 'dev.viewtube.io';
+const YOUTUBE_URL = 'yt.sheev.net';
 const NOW = getNowDate();
 const YEAR_IN_MS = 31536000000;
 
@@ -105,7 +105,7 @@ export async function render(dev = false, write = false) {
     const now = NOW.toString().split('(')[0].trim();
 
     // search url
-    const searchUrl = `https://${YOUTUBE_URL}/results`;
+    const searchUrl = `https://${YOUTUBE_URL}/search`;
 
     const source = readFileSync(resolve(INPUT_TEMPLATE), { encoding: 'utf8' });
     const template = compile(source, { localsName: 'it' });
