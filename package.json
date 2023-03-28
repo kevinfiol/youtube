@@ -9,7 +9,6 @@
   "author": "kevinfiol",
   "license": "MIT",
   "dependencies": {
-    "rss-parser": "3.6.3",
-    "yeahjs": "0.3.0"
+    "xml2js": "^0.4.23"
   }
 }

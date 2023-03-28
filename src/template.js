@@ -1,3 +1,10 @@
+const forEach = (arr, fn) => {
+  let i, str = '';
+  for (i = 0; i < arr.length; i++) str += fn(arr[i]);
+  return str;
+};
+
+export const template = ({ searchUrl, days, videos }) => (`
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,7 +18,7 @@
     <header>
       <h1>🦉</h1>
       <div class="search">
-        <form action="<%= it.searchUrl %>" method="GET">
+        <form action="${searchUrl}" method="GET">
           <div class="input-group">
             <input type="text" class="text-input" name="q" placeholder="search" />
             <button type="submit">submit</button>
@@ -25,33 +32,34 @@
     </a>
 
     <main>
-      <% for (let day of it.days) { %>
+      ${forEach(days, day => `
         <div class="day">
-          <h2><%= day %></h2>
+          <h2>${day}</h2>
           <hr />
           <div class="videos">
-            <% for (let video of it.videos[day]) { %>
+            ${forEach(videos[day], video => `
               <div class="video">
-                <a href="<%= video.link %>">
-                  <img src="<%= video.thumbnail %>" loading="lazy" />
+                <a href="${video.link}">
+                  <img src="${video.thumbnail}" loading="lazy" />
                 </a>
 
                 <p>
-                  <a href="<%= video.link %>">
-                    <%= video.title %>
+                  <a href="${video.link}">
+                    ${video.title}
                   </a>
                 </p>
 
                 <p>
-                  <a href="<%= video.channel %>">
-                    <strong><%= video.author %>&nbsp;</strong>
+                  <a href="${video.channel}">
+                    <strong>${video.author}&nbsp;</strong>
                   </a>
                 </p>
               </div>
-            <% } %>
+            `)}
           </div>
         </div>
-      <% } %>
+      `)}
     </main>
 </body>
 </html>
+`);

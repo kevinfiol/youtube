@@ -1,12 +1,11 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-import Parser from 'rss-parser';
-import { compile } from 'yeahjs';
+import { parseStringPromise } from 'xml2js';
+import { template } from './template.js';
 import FEEDS from './feeds.json' assert { type: 'json' };
 
 const TEST_FILE = resolve('./src/data.json');
-const TEMPLATE_FILE = resolve('./src/template.html');
 const OUTPUT_FILE = resolve('./dist/index.html');
 
 const YOUTUBE_URL = 'yt.sheev.net';
@@ -15,20 +14,11 @@ const NOW = getNowDate(TIMEZONE_OFFSET);
 const YEAR_IN_MS = 31536000000;
 
 const FEED_CONTENT_TYPES = [
-  'application/json',
   'application/atom+xml',
   'application/rss+xml',
   'application/xml',
   'text/xml'
 ];
-
-const PARSER = new Parser({
-  customFields: {
-    item: [
-      ['media:group', 'group']
-    ]
-  }
-});
 
 export async function render(dev = false, write = false) {
   let videos = {};
@@ -36,9 +26,9 @@ export async function render(dev = false, write = false) {
   if (dev) {
     videos = JSON.parse(readFileSync(TEST_FILE, { encoding: 'utf8' }));
   } else {
-    for (const [_channel, feed] of FEEDS) {
+    for (const [_channel, feedUrl] of FEEDS) {
       try {
-        const response = await fetch(feed, { method: 'GET' });
+        const response = await fetch(feedUrl, { method: 'GET' });
         const contentType = response.headers.get('content-type').split(';')[0]; // e.g., `application/xml; charset=utf-8` -> `application/xml`
 
         if (!FEED_CONTENT_TYPES.includes(contentType)) {
@@ -47,14 +37,21 @@ export async function render(dev = false, write = false) {
         }
 
         const body = await response.text();
-        const contents = typeof body === "string" ? await PARSER.parseString(body) : body;
+        const { feed } = await parseStringPromise(body);
 
-        contents.items.forEach(item => {
-          const pubDate = new Date(item.pubDate);
+        const channel = youtubeRedirect(feed.link[1]['$'].href, YOUTUBE_URL);
+
+        feed.entry.forEach(video => {
+          const pubDate = new Date(video.published[0]);
           const diffInMs = NOW - pubDate;
 
           // don't include videos more than a year old
           if (diffInMs > YEAR_IN_MS) return;
+
+          const title = video.title[0];
+          const author = video.author[0].name[0];
+          const link = youtubeRedirect(video.link[0]['$'].href, YOUTUBE_URL);
+          const thumbnail = video['media:group'][0]['media:thumbnail'][0]['$'].url;
 
           const month = pubDate.getMonth() + 1;
           const date = pubDate.getDate();
@@ -63,12 +60,13 @@ export async function render(dev = false, write = false) {
           if (!videos[dateStr]) videos[dateStr] = [];
 
           videos[dateStr].push({
-            ...item,
+            title,
+            author,
+            pubDate,
             dateStr,
-            youtube: item.link + '&redirect=false', // query param to use with kevinfiol/redirector
-            link: `https://${YOUTUBE_URL}` + item.link.split('youtube.com')[1], // redirect
-            thumbnail: item.group['media:thumbnail'][0]['$'].url,
-            channel: `https://${YOUTUBE_URL}` + contents.link.split('youtube.com')[1] // redirect
+            link,
+            thumbnail,
+            channel
           });
         });
       } catch (e) {
@@ -91,14 +89,8 @@ export async function render(dev = false, write = false) {
     return a < b ? 1 : -1;
   });
 
-  const now = NOW.toString().split('(')[0].trim();
-
-  // search url
   const searchUrl = `https://${YOUTUBE_URL}/search`;
-
-  const source = readFileSync(TEMPLATE_FILE, { encoding: 'utf8' });
-  const template = compile(source, { localsName: 'it' });
-  const html = template({ videos, days, now, searchUrl });
+  const html = template({ videos, days, searchUrl });
   writeFileSync(OUTPUT_FILE, html, { encoding: 'utf8' });
 }
 
@@ -107,4 +99,9 @@ function getNowDate(offset) {
   const utc = d.getTime() + (d.getTimezoneOffset() * 60000);
   d = new Date(utc + (3600000 * offset));
   return d;
+}
+
+// converts a youtube URL to its equivalent redirect; for use with invidious/Piped/etc.
+function youtubeRedirect(link, redirectUrl) {
+  return `https://${redirectUrl}` + link.split('youtube.com')[1];
 }
