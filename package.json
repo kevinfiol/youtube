@@ -2,9 +2,9 @@
   "name": "youtube-subs",
   "type": "module",
   "scripts": {
-    "build": "node scripts/build.js",
-    "write": "node scripts/build.js -w",
-    "dev": "node scripts/build.js -d"
+    "build": "node build.js",
+    "write": "node build.js -w",
+    "dev": "node build.js -d"
   },
   "author": "kevinfiol",
   "license": "MIT",
