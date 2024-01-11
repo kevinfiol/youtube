@@ -3,7 +3,7 @@ import { resolve } from 'node:path';
 
 import { parseStringPromise } from 'xml2js';
 import { template } from './template.js';
-import FEEDS from './feeds.json' assert { type: 'json' };
+import { feeds } from './feeds.js';
 
 const TEST_FILE = resolve('./src/data.json');
 const OUTPUT_FILE = resolve('./dist/index.html');
@@ -26,7 +26,7 @@ export async function render(dev = false, write = false) {
   if (dev) {
     videos = JSON.parse(readFileSync(TEST_FILE, { encoding: 'utf8' }));
   } else {
-    for (const [_channel, feedUrl] of FEEDS) {
+    for (const [_channel, feedUrl] of feeds) {
       try {
         const response = await fetch(feedUrl, { method: 'GET' });
         const contentType = response.headers.get('content-type').split(';')[0]; // e.g., `application/xml; charset=utf-8` -> `application/xml`

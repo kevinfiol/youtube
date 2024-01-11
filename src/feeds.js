@@ -1,12 +1,12 @@
-[
+export const feeds = [
   [
     "The Linux Experiment",
     "https://www.youtube.com/feeds/videos.xml?channel_id=UC5UAwBUum7CPN5buc-_N1Fw"
   ],
-  //[
+  // [
   //  "Retro Game Corps",
   //  "https://www.youtube.com/feeds/videos.xml?channel_id=UCoZQiN0o7f36H7PaW4fVhFw"
-  //],
+  // ],
   [
     "Masahiro Sakurai on Creating Games",
     "https://www.youtube.com/feeds/videos.xml?channel_id=UCv1DvRY5PyHHt3KN9ghunuw"
@@ -351,4 +351,4 @@
     "yosemiteland",
     "https://www.youtube.com/feeds/videos.xml?channel_id=UCw1EjmvTw9Apo5n_bGlGZrg"
   ]
-]
+];
