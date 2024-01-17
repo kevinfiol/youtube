@@ -111,10 +111,10 @@ export const feeds = [
     "Errant Signal",
     "https://www.youtube.com/feeds/videos.xml?channel_id=UCm4JnxTxtvItQecKUc4zRhQ"
   ],
-  [
-    "ETA PRIME",
-    "https://www.youtube.com/feeds/videos.xml?channel_id=UC_0CVCfC_3iuHqmyClu59Uw"
-  ],
+  // [
+  //   "ETA PRIME",
+  //   "https://www.youtube.com/feeds/videos.xml?channel_id=UC_0CVCfC_3iuHqmyClu59Uw"
+  // ],
   [
     "Ethereal Snake",
     "https://www.youtube.com/feeds/videos.xml?channel_id=UCzSHr-wO24dtLB0-KkiY3MQ"
