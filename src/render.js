@@ -8,7 +8,7 @@ import { feeds } from './feeds.js';
 const TEST_FILE = resolve('./src/data.json');
 const OUTPUT_FILE = resolve('./dist/index.html');
 
-const YOUTUBE_URL = 'yt.sheev.net';
+const YOUTUBE_URL = 'tube.sheev.net';
 const TIMEZONE_OFFSET = -4.0; // default to EST
 const NOW = getNowDate(TIMEZONE_OFFSET);
 const YEAR_IN_MS = 31536000000;
