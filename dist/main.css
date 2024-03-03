@@ -33,7 +33,7 @@ header {
   display: flex;
   align-items: center;
   position: sticky;
-  margin: 1rem 0 4rem 0;
+  margin: 1rem 0 2rem 0;
   gap: 10px;
   top: 0;
   background-color: var(--bg-color);
@@ -130,4 +130,21 @@ button {
 
 button:hover {
   background-color: var(--bg-color);
+}
+
+.subscriptions > summary {
+  font-weight: 600;
+  cursor: pointer;
+  padding: 1em 0;
+}
+
+.subscriptions > summary:hover {
+  background-color: var(--faded-bg);
+}
+
+.subscriptions > article {
+  margin: 0.6rem 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 4px;
 }

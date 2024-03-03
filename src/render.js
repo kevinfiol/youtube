@@ -22,11 +22,14 @@ const FEED_CONTENT_TYPES = [
 
 export async function render(dev = false, write = false) {
   let videos = {};
+  let channelLinks = [];
 
   if (dev) {
-    videos = JSON.parse(readFileSync(TEST_FILE, { encoding: 'utf8' }));
+    const testData = JSON.parse(readFileSync(TEST_FILE, { encoding: 'utf8' }));
+    videos = testData.videos;
+    channelLinks = testData.channelLinks;
   } else {
-    for (const [_channel, feedUrl] of feeds) {
+    for (const [channelName, feedUrl] of feeds) {
       try {
         const response = await fetch(feedUrl, { method: 'GET' });
         const contentType = response.headers.get('content-type').split(';')[0]; // e.g., `application/xml; charset=utf-8` -> `application/xml`
@@ -40,6 +43,7 @@ export async function render(dev = false, write = false) {
         const { feed } = await parseStringPromise(body);
 
         const channel = youtubeRedirect(feed.link[1]['$'].href, YOUTUBE_URL);
+        channelLinks.push({ name: channelName, url: channel });
 
         feed.entry.forEach(video => {
           const pubDate = new Date(video.published[0]);
@@ -74,7 +78,7 @@ export async function render(dev = false, write = false) {
       }
     }
 
-    if (write) writeFileSync(TEST_FILE, JSON.stringify(videos), 'utf8');
+    if (write) writeFileSync(TEST_FILE, JSON.stringify({ videos, channelLinks }, null, 2), 'utf8');
   }
 
   for (let day in videos) {
@@ -89,8 +93,13 @@ export async function render(dev = false, write = false) {
     return a < b ? 1 : -1;
   });
 
+  // sort channel links
+  channelLinks = channelLinks.sort((a, b) =>
+    a.name > b.name ? 1 : -1
+  );
+
   const searchUrl = `https://${YOUTUBE_URL}/search`;
-  const html = template({ videos, days, searchUrl });
+  const html = template({ videos, days, searchUrl, channelLinks });
   writeFileSync(OUTPUT_FILE, html, { encoding: 'utf8' });
 }
 

@@ -4,7 +4,7 @@ const forEach = (arr, fn) => {
   return str;
 };
 
-export const template = ({ searchUrl, days, videos }) => (`
+export const template = ({ searchUrl, days, videos, channelLinks }) => (`
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,6 +32,14 @@ export const template = ({ searchUrl, days, videos }) => (`
     </a>
 
     <main>
+      <details class="subscriptions">
+        <summary>Subscriptions</summary>
+        <article>
+          ${forEach(channelLinks, ({ name, url }) => `
+            <a href="${url}">${name}</a>
+          `)}
+        </article>
+      </details>
       ${forEach(days, day => `
         <div class="day">
           <h2>${day}</h2>
