@@ -4,6 +4,7 @@ import { resolve } from 'node:path';
 import { parseStringPromise } from 'xml2js';
 import { template } from './template.js';
 import { feeds } from './feeds.js';
+import { MODES } from './modes.js';
 
 const TEST_FILE = resolve('./src/data.json');
 const OUTPUT_FILE = resolve('./dist/index.html');
@@ -13,6 +14,12 @@ const TIMEZONE_OFFSET = -4.0; // default to EST
 const NOW = getNowDate(TIMEZONE_OFFSET);
 const YEAR_IN_MS = 31536000000;
 
+const URL = {
+  [MODES.INVIDIOUS]: { domain: 'yt.sheev.net', query: 'q', search: 'search' },
+  [MODES.LIGHTTUBE]: { domain: 'tube.sheev.net', query: 'search_query', search: 'results' },
+  [MODES.YOUTUBE]: { domain: 'youtube.com', query: 'search_query', search: 'results' }
+};
+
 const FEED_CONTENT_TYPES = [
   'application/atom+xml',
   'application/rss+xml',
@@ -20,9 +27,10 @@ const FEED_CONTENT_TYPES = [
   'text/xml'
 ];
 
-export async function render(dev = false, write = false) {
+export async function render({ dev = false, write = false, mode = MODES.YOUTUBE } = {}) {
   let videos = {};
   let channelLinks = [];
+  const { domain, query, search } = URL[mode];
 
   if (dev) {
     const testData = JSON.parse(readFileSync(TEST_FILE, { encoding: 'utf8' }));
@@ -42,7 +50,7 @@ export async function render(dev = false, write = false) {
         const body = await response.text();
         const { feed } = await parseStringPromise(body);
 
-        const channel = youtubeRedirect(feed.link[1]['$'].href, YOUTUBE_URL);
+        const channel = youtubeRedirect(feed.link[1]['$'].href, domain);
         channelLinks.push({ name: channelName, url: channel });
 
         feed.entry.forEach(video => {
@@ -54,7 +62,7 @@ export async function render(dev = false, write = false) {
 
           const title = video.title[0];
           const author = video.author[0].name[0];
-          const link = youtubeRedirect(video.link[0]['$'].href, YOUTUBE_URL);
+          const link = youtubeRedirect(video.link[0]['$'].href, domain);
           const thumbnail = video['media:group'][0]['media:thumbnail'][0]['$'].url;
 
           const month = pubDate.getMonth() + 1;
@@ -98,8 +106,8 @@ export async function render(dev = false, write = false) {
     a.name > b.name ? 1 : -1
   );
 
-  const searchUrl = `https://${YOUTUBE_URL}/search`;
-  const html = template({ videos, days, searchUrl, channelLinks });
+  const searchUrl = `https://${domain}/${search}`;
+  const html = template({ videos, days, searchUrl, query, channelLinks });
   writeFileSync(OUTPUT_FILE, html, { encoding: 'utf8' });
 }
 

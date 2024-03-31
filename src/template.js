@@ -4,7 +4,7 @@ const forEach = (arr, fn) => {
   return str;
 };
 
-export const template = ({ searchUrl, days, videos, channelLinks }) => (`
+export const template = ({ searchUrl, query, days, videos, channelLinks }) => (`
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,7 +20,7 @@ export const template = ({ searchUrl, days, videos, channelLinks }) => (`
       <div class="search">
         <form action="${searchUrl}" method="GET">
           <div class="input-group">
-            <input type="text" class="text-input" name="q" placeholder="search" />
+            <input type="text" class="text-input" name="${query}" placeholder="search" />
             <button type="submit">submit</button>
           </div>
         </form>
