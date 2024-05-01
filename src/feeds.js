@@ -1,5 +1,9 @@
 export const feeds = [
   [
+    "Grim Beard",
+    "https://www.youtube.com/feeds/videos.xml?channel_id=UCNmv1Cmjm3Hk8Vc9kIgv0AQ",
+  ],
+  [
     "The Linux Experiment",
     "https://www.youtube.com/feeds/videos.xml?channel_id=UC5UAwBUum7CPN5buc-_N1Fw"
   ],
