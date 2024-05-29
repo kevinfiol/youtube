@@ -1,5 +1,9 @@
 export const feeds = [
   [
+    "HappyConsoleGamer",
+    "https://www.youtube.com/feeds/videos.xml?channel_id=UC2vUKoTGIwNYq4LO0YWKPIg"
+  ],
+  [
     "ScionVyse",
     "https://www.youtube.com/feeds/videos.xml?channel_id=UC2yQ7rv4HZgagPMltOffq2w"
   ],
