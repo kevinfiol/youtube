@@ -1,5 +1,9 @@
 export const feeds = [
   [
+    "Majuular",
+    "https://www.youtube.com/feeds/videos.xml?channel_id=UCAYF6ZY9gWBR1GW3R7PX7yw"
+  ],
+  [
     "Veronica Explains",
     "https://www.youtube.com/feeds/videos.xml?channel_id=UCMiyV_Ib77XLpzHPQH_q0qQ"
   ],
