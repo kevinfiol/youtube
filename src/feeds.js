@@ -1,5 +1,13 @@
 export const feeds = [
   [
+    "My Life In Gaming",
+    "https://www.youtube.com/feeds/videos.xml?channel_id=UCpvtp7mH0Cdq8FQUxcjDq0Q"
+  ],
+  [
+    "Retrobird",
+    "https://www.youtube.com/feeds/videos.xml?channel_id=UC9L4gU9wd7ImK8vP4WnJ_wQ"
+  ],
+  [
     "Majuular",
     "https://www.youtube.com/feeds/videos.xml?channel_id=UCAYF6ZY9gWBR1GW3R7PX7yw"
   ],
