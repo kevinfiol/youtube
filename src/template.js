@@ -65,6 +65,16 @@ export const template = ({ searchUrl, query, days, videos, channelLinks, randomV
         </article>
       </details>
 
+      ${_.if(days[0], `
+        <div class="day">
+          <h2>${days[0]}</h2>
+          <hr />
+          <div class="videos">
+            ${_.forEach(videos[days[0]], Video)}
+          </div>
+        </div>
+      `)}
+
       ${_.if(randomVideos.length, `
         <div class="day">
           <h2>Picks from your subscriptions</h2>
@@ -75,7 +85,7 @@ export const template = ({ searchUrl, query, days, videos, channelLinks, randomV
         </div>
       `)}
 
-      ${_.forEach(days, day => `
+      ${_.forEach(days.slice(1), day => `
         <div class="day">
           <h2>${day}</h2>
           <hr />
