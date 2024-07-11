@@ -156,7 +156,8 @@ async function getRandomVideos(channelIds = []) {
       });
 
       const json = await res.json();
-      if (!json.error) videos.push(json.data);
+      if (json.error) throw Error(json.error);
+      videos.push(json.data);
     } catch (e) {
       console.error(e);
     }
