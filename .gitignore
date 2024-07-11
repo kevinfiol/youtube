@@ -2,3 +2,4 @@ dist/index.html
 !dist/.keep
 src/data.json
 node_modules
+.env

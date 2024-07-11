@@ -6,6 +6,10 @@ import { template } from './template.js';
 import { feeds } from './feeds.js';
 import { MODES } from './modes.js';
 
+const YT_RANDOM_URL = process.env.YT_RANDOM_URL;
+const YT_RANDOM_USER = process.env.YT_RANDOM_USER;
+const YT_RANDOM_PASSWORD = process.env.YT_RANDOM_PASSWORD;
+
 const TEST_FILE = resolve('./src/data.json');
 const OUTPUT_FILE = resolve('./dist/index.html');
 
@@ -14,7 +18,7 @@ const TIMEZONE_OFFSET = -4.0; // default to EST
 const NOW = getNowDate(TIMEZONE_OFFSET);
 const YEAR_IN_MS = 31536000000;
 
-const URL = {
+const URL_MODE = {
   [MODES.INVIDIOUS]: { domain: 'yt.sheev.net', query: 'q', search: 'search' },
   [MODES.LIGHTTUBE]: { domain: 'tube.sheev.net', query: 'search_query', search: 'results' },
   [MODES.YOUTUBE]: { domain: 'youtube.com', query: 'search_query', search: 'results' }
@@ -30,13 +34,38 @@ const FEED_CONTENT_TYPES = [
 export async function render({ dev = false, write = false, mode = MODES.YOUTUBE } = {}) {
   let videos = {};
   let channelLinks = [];
-  const { domain, query, search } = URL[mode];
+  let randomVideos = [];
+
+  const { domain, query, search } = URL_MODE[mode];
 
   if (dev) {
     const testData = JSON.parse(readFileSync(TEST_FILE, { encoding: 'utf8' }));
     videos = testData.videos;
     channelLinks = testData.channelLinks;
+    randomVideos = testData.randomVideos;
   } else {
+    // get at most 5 random channels to get random videos from
+    const randomChannels = [];
+    for (let i = 0; i < Math.min(feeds.length, 5); i++) {
+      let channelId = '';
+
+      do {
+        const [_, feedUrl] = getRandom(feeds);
+        const url = new URL(feedUrl);
+        channelId = url.searchParams.get('channel_id');
+      } while (randomChannels.includes(channelId))
+
+      randomChannels.push(channelId);
+    }
+
+    randomVideos = await getRandomVideos(randomChannels);
+    randomVideos = randomVideos.map((video) => ({
+      ...video,
+      thumbnail: video.imgUrl,
+      link: `https://${domain}/watch?v=${video.id}`,
+      channel: `https://${domain}/channel/${video.channelId}`
+    }));
+
     for (const [channelName, feedUrl] of feeds) {
       try {
         const response = await fetch(feedUrl, { method: 'GET' });
@@ -86,7 +115,10 @@ export async function render({ dev = false, write = false, mode = MODES.YOUTUBE 
       }
     }
 
-    if (write) writeFileSync(TEST_FILE, JSON.stringify({ videos, channelLinks }, null, 2), 'utf8');
+    if (write) {
+      const data = { videos, channelLinks, randomVideos };
+      writeFileSync(TEST_FILE, JSON.stringify(data, null, 2), 'utf8');
+    }
   }
 
   for (let day in videos) {
@@ -107,8 +139,36 @@ export async function render({ dev = false, write = false, mode = MODES.YOUTUBE 
   );
 
   const searchUrl = `https://${domain}/${search}`;
-  const html = template({ videos, days, searchUrl, query, channelLinks });
+  const html = template({ videos, days, searchUrl, query, channelLinks, randomVideos });
   writeFileSync(OUTPUT_FILE, html, { encoding: 'utf8' });
+}
+
+async function getRandomVideos(channelIds = []) {
+  const videos = [];
+  const credentials = btoa(`${YT_RANDOM_USER}:${YT_RANDOM_PASSWORD}`);
+
+  for (const channelId of channelIds) {
+    try {
+      const query = new URLSearchParams({ channelId }).toString();
+
+      const res = await fetch(YT_RANDOM_URL + '/random?' + query, {
+        method: 'GET',
+        headers: { 'Authorization': `Basic ${credentials}` }
+      });
+
+      const json = await res.json();
+      videos.push(json.data);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
+  return videos;
+}
+
+function getRandom(arr = []) {
+  const idx = Math.floor(Math.random() * arr.length);
+  return arr[idx];
 }
 
 function getNowDate(offset) {

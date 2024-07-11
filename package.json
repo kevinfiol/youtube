@@ -2,9 +2,9 @@
   "name": "youtube-subs",
   "type": "module",
   "scripts": {
-    "build": "node build.js",
-    "write": "node build.js -w",
-    "dev": "node build.js -d"
+    "build": "node --env-file=.env build.js",
+    "write": "node --env-file=.env build.js -w",
+    "dev": "node --env-file=.env build.js -d"
   },
   "author": "kevinfiol",
   "license": "MIT",

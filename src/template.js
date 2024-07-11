@@ -1,10 +1,34 @@
-const forEach = (arr, fn) => {
-  let i, str = '';
-  for (i = 0; i < arr.length; i++) str += fn(arr[i]);
-  return str;
+const _ = {
+  if: (condition, template) =>
+    condition ? template : '',
+  forEach: (arr, fn) => {
+    let i, str = '';
+    for (i = 0; i < arr.length; i++) str += fn(arr[i]);
+    return str;
+  }
 };
 
-export const template = ({ searchUrl, query, days, videos, channelLinks }) => (`
+const Video = (video) => `
+  <div class="video">
+    <a href="${video.link}">
+      <img src="${video.thumbnail}" loading="lazy" />
+    </a>
+
+    <p>
+      <a href="${video.link}">
+        ${video.title}
+      </a>
+    </p>
+
+    <p>
+      <a href="${video.channel}">
+        <strong>${video.author ?? video.channelTitle}&nbsp;</strong>
+      </a>
+    </p>
+  </div>
+`;
+
+export const template = ({ searchUrl, query, days, videos, channelLinks, randomVideos }) => (`
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -35,35 +59,28 @@ export const template = ({ searchUrl, query, days, videos, channelLinks }) => (`
       <details class="subscriptions">
         <summary>Subscriptions</summary>
         <article>
-          ${forEach(channelLinks, ({ name, url }) => `
+          ${_.forEach(channelLinks, ({ name, url }) => `
             <a href="${url}">${name}</a>
           `)}
         </article>
       </details>
-      ${forEach(days, day => `
+
+      ${_.if(randomVideos.length, `
+        <div class="day">
+          <h2>Picks from your subscriptions</h2>
+          <hr />
+          <div class="videos">
+            ${forEach(randomVideos, Video)}
+          </div>
+        </div>
+      `)}
+
+      ${_.forEach(days, day => `
         <div class="day">
           <h2>${day}</h2>
           <hr />
           <div class="videos">
-            ${forEach(videos[day], video => `
-              <div class="video">
-                <a href="${video.link}">
-                  <img src="${video.thumbnail}" loading="lazy" />
-                </a>
-
-                <p>
-                  <a href="${video.link}">
-                    ${video.title}
-                  </a>
-                </p>
-
-                <p>
-                  <a href="${video.channel}">
-                    <strong>${video.author}&nbsp;</strong>
-                  </a>
-                </p>
-              </div>
-            `)}
+            ${forEach(videos[day], Video)}
           </div>
         </div>
       `)}
