@@ -20,6 +20,10 @@ jobs:
         with:
           node-version: 20.11.1
       - name: run
+        env:
+          YT_RANDOM_USER: ${{ secrets.YT_RANDOM_USER }}
+          YT_RANDOM_PASSWORD: ${{ secrets.YT_RANDOM_PASSWORD }}
+          YT_RANDOM_URL: ${{ secrets.YT_RANDOM_URL }}
         run: |
           npm install --omit=dev
           npm run build
