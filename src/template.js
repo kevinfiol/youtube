@@ -70,7 +70,7 @@ export const template = ({ searchUrl, query, days, videos, channelLinks, randomV
           <h2>Picks from your subscriptions</h2>
           <hr />
           <div class="videos">
-            ${forEach(randomVideos, Video)}
+            ${_.forEach(randomVideos, Video)}
           </div>
         </div>
       `)}
@@ -80,7 +80,7 @@ export const template = ({ searchUrl, query, days, videos, channelLinks, randomV
           <h2>${day}</h2>
           <hr />
           <div class="videos">
-            ${forEach(videos[day], Video)}
+            ${_.forEach(videos[day], Video)}
           </div>
         </div>
       `)}

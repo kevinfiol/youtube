@@ -10,6 +10,8 @@ const YT_RANDOM_URL = process.env.YT_RANDOM_URL;
 const YT_RANDOM_USER = process.env.YT_RANDOM_USER;
 const YT_RANDOM_PASSWORD = process.env.YT_RANDOM_PASSWORD;
 
+console.log({ YT_RANDOM_URL, YT_RANDOM_USER, YT_RANDOM_PASSWORD });
+
 const TEST_FILE = resolve('./src/data.json');
 const OUTPUT_FILE = resolve('./dist/index.html');
 
