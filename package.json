@@ -2,7 +2,7 @@
   "name": "youtube-subs",
   "type": "module",
   "scripts": {
-    "build": "node --env-file=.env build.js",
+    "build": "node build.js",
     "write": "node --env-file=.env build.js -w",
     "dev": "node --env-file=.env build.js -d"
   },
