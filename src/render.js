@@ -60,7 +60,6 @@ export async function render({ dev = false, write = false, mode = MODES.YOUTUBE 
     randomVideos = await getRandomVideos(randomChannels);
     randomVideos = randomVideos.map((video) => ({
       ...video,
-      thumbnail: video.imgUrl,
       link: `https://${domain}/watch?v=${video.id}`,
       channel: `https://${domain}/channel/${video.channelId}`
     }));

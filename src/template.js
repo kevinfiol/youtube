@@ -22,7 +22,7 @@ const Video = (video) => `
 
     <p>
       <a href="${video.channel}">
-        <strong>${video.author ?? video.channelTitle}&nbsp;</strong>
+        <strong>${video.author}&nbsp;</strong>
       </a>
     </p>
   </div>
