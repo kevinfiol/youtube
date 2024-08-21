@@ -76,10 +76,6 @@ export const feeds = [
     "https://www.youtube.com/feeds/videos.xml?channel_id=UCxDZs_ltFFvn0FDHT6kmoXA"
   ],
   [
-    "barely functional dev",
-    "https://www.youtube.com/feeds/videos.xml?channel_id=UCld0nRHCzNEKsZcGGa9xcoQ"
-  ],
-  [
     "CalebCity",
     "https://www.youtube.com/feeds/videos.xml?channel_id=UCI1XS_GkLGDOgf8YLaaXNRA"
   ],
