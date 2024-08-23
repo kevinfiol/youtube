@@ -50,7 +50,7 @@ export async function render({ dev = false, write = false, mode = MODES.YOUTUBE 
 
       do {
         const [_, feedUrl] = getRandom(feeds);
-        const url = new URL(feedUrl);
+        const url = new URL(normalizeFeedUrl(feedUrl));
         channelId = url.searchParams.get('channel_id');
       } while (randomChannels.includes(channelId))
 
@@ -66,7 +66,7 @@ export async function render({ dev = false, write = false, mode = MODES.YOUTUBE 
 
     for (const [channelName, feedUrl] of feeds) {
       try {
-        const response = await fetch(feedUrl, { method: 'GET' });
+        const response = await fetch(normalizeFeedUrl(feedUrl), { method: 'GET' });
         const contentType = response.headers.get('content-type').split(';')[0]; // e.g., `application/xml; charset=utf-8` -> `application/xml`
 
         if (!FEED_CONTENT_TYPES.includes(contentType)) {
@@ -180,4 +180,9 @@ function getNowDate(offset) {
 // converts a youtube URL to its equivalent redirect; for use with invidious/Piped/etc.
 function youtubeRedirect(link, redirectUrl) {
   return `https://${redirectUrl}` + link.split('youtube.com')[1];
+}
+
+function normalizeFeedUrl(url) {
+  const prefix = "https://www.youtube.com/feeds/videos.xml?channel_id=";
+  return url.startsWith('http') ? url : (prefix + url);
 }
