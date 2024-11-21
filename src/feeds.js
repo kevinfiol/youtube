@@ -1,5 +1,5 @@
 export const feeds = [
-  ["Ancient Americas", "https://www.youtube.com/feeds/videos.xml?channel_id=UCEqNbbsx0i7fhwRt0saYIcQ"],
+  "@AncientAmericas",
   [
     "Gamemakers Toolkit",
     "UCqJ-Xo29CKyLTjn6z2XwYAw"

@@ -16,6 +16,7 @@ const OUTPUT_FILE = resolve('./dist/index.html');
 const TIMEZONE_OFFSET = -4.0; // default to EST
 const NOW = getNowDate(TIMEZONE_OFFSET);
 const YEAR_IN_MS = 31536000000;
+const RSS_URL_REGEX = /href="([^"]*https:\/\/www\.youtube\.com\/feeds\/videos\.xml\?channel_id=[^"]*)"/;
 
 const URL_MODE = {
   [MODES.INVIDIOUS]: { domain: 'yt.sheev.net', query: 'q', search: 'search' },
@@ -29,6 +30,16 @@ const FEED_CONTENT_TYPES = [
   'application/xml',
   'text/xml'
 ];
+
+const feedEntries = feeds.map((feed) =>
+  Array.isArray(feed) ? feed : [feed.slice(1), feed]
+);
+
+const feedUrls = await Promise.all(
+  feedEntries.map(async (entry) =>
+    [entry[0], await getFeedUrl(entry[1])]
+  )
+);
 
 export async function render({ dev = false, write = false, mode = MODES.YOUTUBE } = {}) {
   let videos = {};
@@ -49,8 +60,8 @@ export async function render({ dev = false, write = false, mode = MODES.YOUTUBE 
       let channelId = '';
 
       do {
-        const [_, feedUrl] = getRandom(feeds);
-        const url = new URL(normalizeFeedUrl(feedUrl));
+        const [_, feedUrl] = getRandom(feedUrls);
+        const url = new URL(feedUrl);
         channelId = url.searchParams.get('channel_id');
       } while (randomChannels.includes(channelId))
 
@@ -182,7 +193,24 @@ function youtubeRedirect(link, redirectUrl) {
   return `https://${redirectUrl}` + link.split('youtube.com')[1];
 }
 
-function normalizeFeedUrl(url) {
-  const prefix = "https://www.youtube.com/feeds/videos.xml?channel_id=";
-  return url.startsWith('http') ? url : (prefix + url);
+async function getFeedUrl(part = '') {
+  if (part.startsWith('http'))
+    return part; // already a url
+
+  if (part.startsWith('@')) {
+    // channel alias
+    try {
+      const res = await fetch(`https://www.youtube.com/${part}`);
+      const html = await res.text();
+      const match = html.match(RSS_URL_REGEX);
+      if (match) return match[1];
+    } catch (_e) {
+      console.error('Could not find feed for ', part);
+    }
+
+    return '';
+  }
+
+  // else it's a channelId
+  return "https://www.youtube.com/feeds/videos.xml?channel_id=" + part;
 }
