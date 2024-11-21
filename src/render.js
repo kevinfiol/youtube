@@ -56,7 +56,7 @@ export async function render({ dev = false, write = false, mode = MODES.YOUTUBE 
   } else {
     // get at most 5 random channels to get random videos from
     const randomChannels = [];
-    for (let i = 0; i < Math.min(feeds.length, 5); i++) {
+    for (let i = 0; i < Math.min(feedUrls.length, 5); i++) {
       let channelId = '';
 
       do {
@@ -75,7 +75,7 @@ export async function render({ dev = false, write = false, mode = MODES.YOUTUBE 
       channel: `https://${domain}/channel/${video.channelId}`
     }));
 
-    for (const [channelName, feedUrl] of feeds) {
+    for (const [channelName, feedUrl] of feedUrls) {
       try {
         const response = await fetch(feedUrl, { method: 'GET' });
         const contentType = response.headers.get('content-type').split(';')[0]; // e.g., `application/xml; charset=utf-8` -> `application/xml`
