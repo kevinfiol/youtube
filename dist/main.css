@@ -136,6 +136,7 @@ button:hover {
   font-weight: 600;
   cursor: pointer;
   padding: 1em 0;
+  user-select: none;
 }
 
 .subscriptions > summary:hover {
