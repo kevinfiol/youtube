@@ -1,4 +1,5 @@
 export const feeds = [
+  "@KBash",
   "@JoshStrifePlays",
   "@Ghostcharm",
   "@AncientAmericas",
