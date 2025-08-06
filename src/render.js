@@ -17,6 +17,7 @@ const TIMEZONE_OFFSET = -4.0; // default to EST
 const NOW = getNowDate(TIMEZONE_OFFSET);
 const YEAR_IN_MS = 31536000000;
 const RSS_URL_REGEX = /href="([^"]*https:\/\/www\.youtube\.com\/feeds\/videos\.xml\?channel_id=[^"]*)"/;
+const NO_OF_RANDOM_VIDEOS = 10;
 
 const URL_MODE = {
   [MODES.INVIDIOUS]: { domain: 'yt.sheev.net', query: 'q', search: 'search' },
@@ -56,7 +57,7 @@ export async function render({ dev = false, write = false, mode = MODES.YOUTUBE 
   } else {
     // get at most 5 random channels to get random videos from
     const randomChannels = [];
-    for (let i = 0; i < Math.min(feedUrls.length, 5); i++) {
+    for (let i = 0; i < Math.min(feedUrls.length, NO_OF_RANDOM_VIDEOS); i++) {
       let channelId = '';
 
       do {
