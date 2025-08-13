@@ -21,7 +21,7 @@ const Video = (video) => `
     </p>
 
     <p>
-      <a href="${video.channel}">
+      <a href="${video.channel}/videos">
         <strong>${video.author}&nbsp;</strong>
       </a>
     </p>
@@ -60,7 +60,7 @@ export const template = ({ searchUrl, query, days, videos, channelLinks, randomV
         <summary>Subscriptions</summary>
         <article>
           ${_.forEach(channelLinks, ({ name, url }) => `
-            <a href="${url}">${name}</a>
+            <a href="${url}/videos">${name}</a>
           `)}
         </article>
       </details>
