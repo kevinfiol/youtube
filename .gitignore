@@ -1,4 +1,5 @@
 dist/index.html
+dist/*.json
 !dist/.keep
 src/data.json
 node_modules

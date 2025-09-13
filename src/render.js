@@ -12,6 +12,7 @@ const YT_RANDOM_PASSWORD = process.env.YT_RANDOM_PASSWORD;
 
 const TEST_FILE = resolve('./src/data.json');
 const OUTPUT_FILE = resolve('./dist/index.html');
+const NEWPIPE_SUBSCRIPTIONS_OUTPUT = resolve('./dist/newpipe_subscriptions.json');
 
 const TIMEZONE_OFFSET = -4.0; // default to EST
 const NOW = getNowDate(TIMEZONE_OFFSET);
@@ -20,8 +21,7 @@ const RSS_URL_REGEX = /href="([^"]*https:\/\/www\.youtube\.com\/feeds\/videos\.x
 const NO_OF_RANDOM_VIDEOS = 10;
 
 const URL_MODE = {
-  [MODES.INVIDIOUS]: { domain: 'yt.sheev.net', query: 'q', search: 'search' },
-  [MODES.LIGHTTUBE]: { domain: 'tube.sheev.net', query: 'search_query', search: 'results' },
+  [MODES.INVIDIOUS]: { domain: 'yewtu.be', query: 'q', search: 'search' },
   [MODES.YOUTUBE]: { domain: 'youtube.com', query: 'search_query', search: 'results' }
 };
 
@@ -42,7 +42,11 @@ const feedUrls = await Promise.all(
   )
 );
 
-export async function render({ dev = false, write = false, mode = MODES.YOUTUBE } = {}) {
+export async function render({
+  dev = false,
+  write = false,
+  mode = MODES.YOUTUBE
+} = {}) {
   let videos = {};
   let channelLinks = [];
   let randomVideos = [];
@@ -55,6 +59,13 @@ export async function render({ dev = false, write = false, mode = MODES.YOUTUBE 
     channelLinks = testData.channelLinks;
     randomVideos = testData.randomVideos;
   } else {
+    // newpipe subs object
+    const newpipe = {
+      app_version: '4.7.2',
+      app_version_int: 108500,
+      subscriptions: []
+    };
+
     // get at most 5 random channels to get random videos from
     const randomChannels = [];
     for (let i = 0; i < Math.min(feedUrls.length, NO_OF_RANDOM_VIDEOS); i++) {
@@ -89,8 +100,16 @@ export async function render({ dev = false, write = false, mode = MODES.YOUTUBE 
         const body = await response.text();
         const { feed } = await parseStringPromise(body);
 
-        const channel = youtubeRedirect(feed.link[1]['$'].href, domain);
+        const rawChannelUrl = feed.link[1]['$'].href;
+        const channel = youtubeRedirect(rawChannelUrl, domain);
         channelLinks.push({ name: channelName, url: channel });
+
+        // add newpipe sub
+        newpipe.subscriptions.push({
+          service_id: 0,
+          url: rawChannelUrl,
+          name: channelName
+        });
 
         feed.entry.forEach(video => {
           const pubDate = new Date(video.published[0]);
@@ -129,6 +148,8 @@ export async function render({ dev = false, write = false, mode = MODES.YOUTUBE 
       const data = { videos, channelLinks, randomVideos };
       writeFileSync(TEST_FILE, JSON.stringify(data, null, 2), 'utf8');
     }
+
+    writeFileSync(NEWPIPE_SUBSCRIPTIONS_OUTPUT, JSON.stringify(newpipe, null, 2), 'utf8');
   }
 
   for (let day in videos) {
