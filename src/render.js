@@ -45,7 +45,8 @@ const feedUrls = await Promise.all(
 export async function render({
   dev = false,
   write = false,
-  mode = MODES.YOUTUBE
+  mode = MODES.YOUTUBE,
+  useEmbedUrls = false
 } = {}) {
   let videos = {};
   let channelLinks = [];
@@ -120,8 +121,12 @@ export async function render({
 
           const title = video.title[0];
           const author = video.author[0].name[0];
-          const link = youtubeRedirect(video.link[0]['$'].href, domain);
           const thumbnail = video['media:group'][0]['media:thumbnail'][0]['$'].url;
+
+          let link = youtubeRedirect(video.link[0]['$'].href, domain);
+          if (mode === MODES.YOUTUBE && useEmbedUrls) {
+            link = link.replace('watch?v=', 'embed/')
+          }
 
           const month = pubDate.getMonth() + 1;
           const date = pubDate.getDate();
