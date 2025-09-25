@@ -1,5 +1,5 @@
-export const feeds = [
-  "corridorcrew",
+export const channels = [
+  "@CorridorCrew",
   "@omalleyrock",
   "@YorkshireRetroGamer",
   "@wareya",

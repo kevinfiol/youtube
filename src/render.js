@@ -17,20 +17,7 @@ const NEWPIPE_SUBSCRIPTIONS_OUTPUT = resolve('./dist/newpipe_subscriptions.json'
 const TIMEZONE_OFFSET = -4.0; // default to EST
 const NOW = getNowDate(TIMEZONE_OFFSET);
 const YEAR_IN_MS = 31536000000;
-const RSS_URL_REGEX = /href="([^"]*https:\/\/www\.youtube\.com\/feeds\/videos\.xml\?channel_id=[^"]*)"/;
 const NO_OF_RANDOM_VIDEOS = 10;
-
-const URL_MODE = {
-  [MODES.INVIDIOUS]: { domain: 'yewtu.be', query: 'q', search: 'search' },
-  [MODES.YOUTUBE]: { domain: 'youtube.com', query: 'search_query', search: 'results' }
-};
-
-const FEED_CONTENT_TYPES = [
-  'application/atom+xml',
-  'application/rss+xml',
-  'application/xml',
-  'text/xml'
-];
 
 const feedEntries = feeds.map((feed) =>
   Array.isArray(feed) ? feed : [feed.slice(1), feed]
@@ -177,30 +164,6 @@ export async function render({
   const searchUrl = `https://${domain}/${search}`;
   const html = template({ videos, days, searchUrl, query, channelLinks, randomVideos });
   writeFileSync(OUTPUT_FILE, html, { encoding: 'utf8' });
-}
-
-async function getRandomVideos(channelIds = []) {
-  const videos = [];
-  const credentials = btoa(`${YT_RANDOM_USER}:${YT_RANDOM_PASSWORD}`);
-
-  for (const channelId of channelIds) {
-    try {
-      const query = new URLSearchParams({ channelId }).toString();
-
-      const res = await fetch(YT_RANDOM_URL + '/random?' + query, {
-        method: 'GET',
-        headers: { 'Authorization': `Basic ${credentials}` }
-      });
-
-      const json = await res.json();
-      if (json.error) throw Error(json.error);
-      videos.push(json.data);
-    } catch (e) {
-      console.error(e);
-    }
-  }
-
-  return videos;
 }
 
 function getRandom(arr = []) {
