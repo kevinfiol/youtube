@@ -1,4 +1,13 @@
-export const channels = [
+import { MODE } from './lib/constants.js';
+
+export const config = {
+  mode: MODE.YOUTUBE,
+  useEmbedUrls: true,
+  randomPicks: 10,
+  buildNewpipeSubs: true
+};
+
+export const feeds = [
   "@CorridorCrew",
   "@omalleyrock",
   "@YorkshireRetroGamer",

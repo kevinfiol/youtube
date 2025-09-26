@@ -1,6 +1,6 @@
 dist/index.html
 dist/*.json
 !dist/.keep
-src/data.json
+cache.json
 node_modules
 .env

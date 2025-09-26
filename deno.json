@@ -1,5 +1,5 @@
 {
   "tasks": {
-    "build": "deno run -NE --env-file main.js"
+    "build": "deno run -RWNE --env-file main.js"
   }
 }

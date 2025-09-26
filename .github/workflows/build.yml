@@ -13,20 +13,19 @@ on:
         description: 'Description Tag'
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: denoland/setup-deno@v2
         with:
-          node-version: 22.19.0
+          deno-version: v2.x
       - name: run
         env:
           YT_RANDOM_USER: ${{ secrets.YT_RANDOM_USER }}
           YT_RANDOM_PASSWORD: ${{ secrets.YT_RANDOM_PASSWORD }}
           YT_RANDOM_URL: ${{ secrets.YT_RANDOM_URL }}
         run: |
-          npm install --omit=dev
-          npm run build
+          deno task build
       - name: deploy
         uses: JamesIves/github-pages-deploy-action@v4.6.4
         with:
