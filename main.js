@@ -1,8 +1,13 @@
-import { feeds, config } from './feeds.js';
+import { config, feeds } from './feeds.js';
 import { domainRedirect, getFeedUrls } from './lib/util.js';
-import { template } from "./lib/template.js";
-import { MODE, DOMAIN_VARS, NEWPIPE_APP_VERSION, NEWPIPE_APP_VERSION_INT } from './lib/constants.js';
-import { parseFeeds } from "./lib/parse.js";
+import { template } from './lib/template.js';
+import {
+  DOMAIN_VARS,
+  MODE,
+  NEWPIPE_APP_VERSION,
+  NEWPIPE_APP_VERSION_INT,
+} from './lib/constants.js';
+import { parseFeeds } from './lib/parse.js';
 
 const TEST = Deno.args.includes('--use-test-data');
 const WRITE = Deno.args.includes('--write-test-data');
@@ -11,7 +16,7 @@ const CACHE_FILE = 'cache.json';
 const data = {
   videos: {},
   channels: [],
-  randomVideos: []
+  randomVideos: [],
 };
 
 if (TEST) {
@@ -22,7 +27,10 @@ if (TEST) {
   data.randomVideos = cache.randomVideos || [];
 } else {
   const feedUrls = await getFeedUrls(feeds);
-  const { videos, channels, randomVideos } = await parseFeeds(feedUrls, config.randomPicks);
+  const { videos, channels, randomVideos } = await parseFeeds(
+    feedUrls,
+    config.randomPicks,
+  );
   const { domain } = DOMAIN_VARS[config.mode];
   const applyRedirect = config.mode !== MODE.YOUTUBE;
 
@@ -30,18 +38,21 @@ if (TEST) {
     const newPipeConfig = {
       app_version: NEWPIPE_APP_VERSION,
       app_version_int: NEWPIPE_APP_VERSION_INT,
-      subscriptions: []
+      subscriptions: [],
     };
 
     for (const channel of channels) {
       newPipeConfig.subscriptions.push({
         service_id: 0,
         url: channel.url,
-        name: channel.name
+        name: channel.name,
       });
     }
 
-    await Deno.writeTextFile('dist/newpipe_subscriptions.json', JSON.stringify(newPipeConfig))
+    await Deno.writeTextFile(
+      'dist/newpipe_subscriptions.json',
+      JSON.stringify(newPipeConfig),
+    );
   }
 
   if (applyRedirect) {
@@ -67,8 +78,8 @@ if (TEST) {
       }
 
       if (config.useEmbedUrls) {
-        video.link = video.link.replace('watch?v=', 'embed/')
-        video.link = video.link.replace('shorts/', 'embed/')
+        video.link = video.link.replace('watch?v=', 'embed/');
+        video.link = video.link.replace('shorts/', 'embed/');
       }
     }
   }
