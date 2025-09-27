@@ -20,6 +20,6 @@
     "singleQuote": true,
     "proseWrap": "preserve",
     "include": ["**/*.js"],
-    "exclude": []
+    "exclude": ["lib/template.js"]
   }
 }
