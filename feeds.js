@@ -8,6 +8,7 @@ export const config = {
 };
 
 export const feeds = [
+  '@PlayerOneStart',
   '@CorridorCrew',
   '@omalleyrock',
   '@YorkshireRetroGamer',
