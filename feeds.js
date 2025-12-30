@@ -8,6 +8,7 @@ export const config = {
 };
 
 export const feeds = [
+  '@Cybershell13',
   '@XboxAhoy',
   '@PlayerOneStart',
   '@CorridorCrew',
