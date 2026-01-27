@@ -8,6 +8,7 @@ export const config = {
 };
 
 export const feeds = [
+  '@jonasceikaCCK',
   '@Nerrel',
   '@Cybershell13',
   '@XboxAhoy',
@@ -228,10 +229,6 @@ export const feeds = [
   [
     'Jeremy Parish | Video Works',
     'https://www.youtube.com/feeds/videos.xml?channel_id=UCrIttXi0WgLXHI1poCk0D6g',
-  ],
-  [
-    'Jonas Čeika - CCK Philosophy',
-    'https://www.youtube.com/feeds/videos.xml?channel_id=UCSkzHxIcfoEr69MWBdo0ppg',
   ],
   [
     'Kaze Emanuar',
