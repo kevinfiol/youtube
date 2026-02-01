@@ -15,7 +15,6 @@ export const feeds = [
   '@PlayerOneStart',
   '@CorridorCrew',
   '@omalleyrock',
-  '@YorkshireRetroGamer',
   '@wareya',
   '@TheGoldenBolt',
   '@CaptainJack1',
