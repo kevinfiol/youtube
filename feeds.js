@@ -20,7 +20,6 @@ export const feeds = [
   '@CaptainJack1',
   '@NoclipDocs',
   '@strafefox',
-  '@DrHueyLi',
   '@KBash',
   '@JoshStrifePlays',
   '@Ghostcharm',
