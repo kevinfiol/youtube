@@ -8,6 +8,8 @@ export const config = {
 };
 
 export const feeds = [
+  '@TheEsotericaChannel',
+  '@WookashPodcast',
   '@jonasceikaCCK',
   '@Nerrel',
   '@Cybershell13',
@@ -44,10 +46,6 @@ export const feeds = [
     'Majuular',
     'https://www.youtube.com/feeds/videos.xml?channel_id=UCAYF6ZY9gWBR1GW3R7PX7yw',
   ],
-  // [
-  //   "Veronica Explains",
-  //   "https://www.youtube.com/feeds/videos.xml?channel_id=UCMiyV_Ib77XLpzHPQH_q0qQ"
-  // ],
   [
     'HappyConsoleGamer',
     'https://www.youtube.com/feeds/videos.xml?channel_id=UC2vUKoTGIwNYq4LO0YWKPIg',
@@ -64,10 +62,6 @@ export const feeds = [
     'The Linux Experiment',
     'https://www.youtube.com/feeds/videos.xml?channel_id=UC5UAwBUum7CPN5buc-_N1Fw',
   ],
-  // [
-  //  "Retro Game Corps",
-  //  "https://www.youtube.com/feeds/videos.xml?channel_id=UCoZQiN0o7f36H7PaW4fVhFw"
-  // ],
   [
     'Masahiro Sakurai on Creating Games',
     'https://www.youtube.com/feeds/videos.xml?channel_id=UCv1DvRY5PyHHt3KN9ghunuw',
@@ -161,10 +155,6 @@ export const feeds = [
     'https://www.youtube.com/feeds/videos.xml?channel_id=UC1ELUfyiYnQQhtPWBS9Dmbg',
   ],
   [
-    'Equal Citizens',
-    'https://www.youtube.com/feeds/videos.xml?channel_id=UCcCFflT7dWMJzPsZSJQa5qQ',
-  ],
-  [
     'Errant Signal',
     'https://www.youtube.com/feeds/videos.xml?channel_id=UCm4JnxTxtvItQecKUc4zRhQ',
   ],
@@ -245,10 +235,6 @@ export const feeds = [
     'https://www.youtube.com/feeds/videos.xml?channel_id=UCLx053rWZxCiYWsBETgdKrQ',
   ],
   [
-    'Living Big In A Tiny House',
-    'https://www.youtube.com/feeds/videos.xml?channel_id=UCoNTMWgGuXtGPLv9UeJZwBw',
-  ],
-  [
     'LowSpecGamer',
     'https://www.youtube.com/feeds/videos.xml?channel_id=UCQkd05iAYed2-LOmhjzDG6g',
   ],
@@ -283,10 +269,6 @@ export const feeds = [
   [
     'Nitro Rad',
     'https://www.youtube.com/feeds/videos.xml?channel_id=UC-3J5xNrAbTLbU1gN8mMpOA',
-  ],
-  [
-    'OdatNurd - Sublime Text Tutorials',
-    'https://www.youtube.com/feeds/videos.xml?channel_id=UCJAB_XF3kAMqwF85y0hxcXQ',
   ],
   [
     'RampagingRex Productions',
