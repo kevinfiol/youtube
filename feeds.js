@@ -8,6 +8,12 @@ export const config = {
 };
 
 export const feeds = [
+  '@javidx9',
+  '@Gdquest',
+  '@SebastianLague',
+  '@Brackeys',
+  '@TBSkyen',
+  '@DesignDoc',
   '@TheEsotericaChannel',
   '@WookashPodcast',
   '@jonasceikaCCK',
