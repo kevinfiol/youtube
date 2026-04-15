@@ -127,10 +127,6 @@ export const feeds = [
     'https://www.youtube.com/feeds/videos.xml?channel_id=UCgnPgGFT3fRVkXKL59iFDzQ',
   ],
   [
-    'Chris Titus Tech',
-    'https://www.youtube.com/feeds/videos.xml?channel_id=UCg6gPGh8HU2U01vaFCAsvmQ',
-  ],
-  [
     'Chronicles',
     'https://www.youtube.com/feeds/videos.xml?channel_id=UCcpVzHaL5zTYL0MY831svqQ',
   ],
