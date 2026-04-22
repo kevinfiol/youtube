@@ -8,6 +8,7 @@ export const config = {
 };
 
 export const feeds = [
+  '@TheInfiniteReview',
   '@YaleCourses',
   '@james.lambert',
   '@javidx9',
