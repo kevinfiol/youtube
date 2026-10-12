@@ -100,7 +100,7 @@ const days = Object.keys(data.videos).sort((a, b) => {
 
 const { domain, search, query } = DOMAIN_VARS[config.mode];
 // const searchUrl = `https://${domain}/${search}`;
-const searchUrl = `https://yt-search.kx.deno.net/`;
+const searchUrl = `https://yt.sheev.net/`;
 
 const html = template({
   ...data,
