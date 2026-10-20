@@ -1,0 +1,15 @@
+{
+  "type": "module",
+  "scripts": {
+    "build": "node --env-file-if-exists=.env main.js",
+    "fmt": "oxfmt"
+  },
+  "dependencies": {
+    "tiny-jsonc": "^1.0.2",
+    "txml": "^6.0.3",
+    "youtubei.js": "^18.2.0"
+  },
+  "devDependencies": {
+    "oxfmt": "^0.72.0"
+  }
+}

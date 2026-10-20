@@ -6,28 +6,33 @@ on:
   schedule:
     # Run this script every 1 hrs
     #  */m hr day month day_of_week
-    - cron:  '0 */1 * * *'
+    - cron: "0 */1 * * *"
   workflow_dispatch:
     inputs:
       tags:
-        description: 'Description Tag'
+        description: "Description Tag"
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [24]
     steps:
-      - uses: actions/checkout@v3
-      - uses: denoland/setup-deno@v2
+      - uses: actions/checkout@v6
+      - name: install pnpm & node.js
+        uses: pnpm/setup@a0881977cd8ea73b1ed212236c99ca10dcc80cf4 # v3.1.1
         with:
-          deno-version: v2.x
-      - name: run
+          runtime: node@${{ matrix.node-version }}
+          cache: true
+      - name: build
         env:
           YT_RANDOM_USER: ${{ secrets.YT_RANDOM_USER }}
           YT_RANDOM_PASSWORD: ${{ secrets.YT_RANDOM_PASSWORD }}
           YT_RANDOM_URL: ${{ secrets.YT_RANDOM_URL }}
         run: |
-          deno task build
+          pnpm build
       - name: deploy
-        uses: JamesIves/github-pages-deploy-action@v4.6.4
+        uses: JamesIves/github-pages-deploy-action@fa24774553152dd7873cd16ebd8d959b010c5445 # v4.9.0
         with:
           single-commit: true
           git-config-email: <>

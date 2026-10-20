@@ -1,5 +1,6 @@
-import { config, feeds } from './feeds.js';
-import { domainRedirect, getFeedUrls } from './lib/util.js';
+import { readFile, writeFile } from 'node:fs/promises';
+import JSONC from 'tiny-jsonc';
+import { domainRedirect } from './lib/util.js';
 import { template } from './lib/template.js';
 import {
   DOMAIN_VARS,
@@ -7,11 +8,15 @@ import {
   NEWPIPE_APP_VERSION,
   NEWPIPE_APP_VERSION_INT,
 } from './lib/constants.js';
-import { parseFeeds } from './lib/parse.js';
+import { parseRSSSubscriptions, parseSubscriptions } from './lib/parse.js';
 
-const TEST = Deno.args.includes('--use-test-data');
-const WRITE = Deno.args.includes('--write-test-data');
+const TEST = process.argv.includes('--use-test-data');
+const WRITE = process.argv.includes('--write-test-data');
 const CACHE_FILE = 'cache.json';
+
+const { subscriptions, ...config } = JSONC.parse(
+  await readFile('settings.jsonc', 'utf-8'),
+);
 
 const data = {
   videos: {},
@@ -21,16 +26,19 @@ const data = {
 
 if (TEST) {
   // use cached test data
-  const cache = JSON.parse(await Deno.readTextFile(CACHE_FILE));
+  const cache = JSON.parse(await readFile(CACHE_FILE, 'utf-8'));
   data.videos = cache.videos || {};
   data.channels = cache.channels || [];
   data.randomVideos = cache.randomVideos || [];
 } else {
-  const feedUrls = await getFeedUrls(feeds);
-  const { videos, channels, randomVideos } = await parseFeeds(
-    feedUrls,
+  const parseFn =
+    config.source === 'innertube' ? parseSubscriptions : parseRSSSubscriptions;
+
+  const { videos, channels, randomVideos } = await parseFn(
+    subscriptions,
     config.randomPicks,
   );
+
   const { domain } = DOMAIN_VARS[config.mode];
   const applyRedirect = config.mode !== MODE.YOUTUBE;
 
@@ -49,7 +57,7 @@ if (TEST) {
       });
     }
 
-    await Deno.writeTextFile(
+    await writeFile(
       'dist/newpipe_subscriptions.json',
       JSON.stringify(newPipeConfig),
     );
@@ -89,17 +97,16 @@ if (TEST) {
   data.randomVideos = randomVideos;
 
   if (WRITE) {
-    await Deno.writeTextFile(CACHE_FILE, JSON.stringify(data, null, 2));
+    await writeFile(CACHE_FILE, JSON.stringify(data, null, 2));
   }
 }
 
-// get sorted list of days
+// get list of days, sorted by each day's newest video
 const days = Object.keys(data.videos).sort((a, b) => {
-  return a < b ? 1 : -1;
+  return data.videos[a][0].pubDate < data.videos[b][0].pubDate ? 1 : -1;
 });
 
-const { domain, search, query } = DOMAIN_VARS[config.mode];
-// const searchUrl = `https://${domain}/${search}`;
+const { query } = DOMAIN_VARS[config.mode];
 const searchUrl = `https://yt.sheev.net/`;
 
 const html = template({
@@ -109,4 +116,4 @@ const html = template({
   query,
 });
 
-await Deno.writeTextFile('dist/index.html', html);
+await writeFile('dist/index.html', html);

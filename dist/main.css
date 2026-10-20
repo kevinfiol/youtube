@@ -44,7 +44,9 @@ header > h1 {
   margin: 0;
 }
 
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   font-family: monospace;
 }
 
@@ -58,7 +60,7 @@ a:visited {
 }
 
 a:hover {
-  opacity: .75;
+  opacity: 0.75;
 }
 
 p {
@@ -101,7 +103,7 @@ p {
 }
 
 .github {
-  position:fixed;
+  position: fixed;
   bottom: 4px;
   right: 4px;
   opacity: 0.25;
