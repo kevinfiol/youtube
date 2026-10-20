@@ -11,5 +11,11 @@
   },
   "devDependencies": {
     "oxfmt": "^0.72.0"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "^12.0.0"
+    }
   }
 }
