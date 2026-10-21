@@ -25,6 +25,13 @@ steps:
       - npm install -g pnpm@12
       - pnpm install --frozen-lockfile --prod
       - pnpm build
+    environment:
+      YT_RANDOM_URL:
+        from_secret: YT_RANDOM_URL
+      YT_RANDOM_USER:
+        from_secret: YT_RANDOM_USER
+      YT_RANDOM_PASSWORD:
+        from_secret: YT_RANDOM_PASSWORD
 
   - name: deploy-client
     image: docker.io/node:24-alpine
@@ -42,9 +49,3 @@ steps:
         from_secret: PICO_KEY
       PICO_CERT_PUBKEY:
         from_secret: PICO_CERT_PUBKEY
-      YT_RANDOM_URL:
-        from_secret: YT_RANDOM_URL
-      YT_RANDOM_USER:
-        from_secret: YT_RANDOM_USER
-      YT_RANDOM_PASSWORD:
-        from_secret: YT_RANDOM_PASSWORD
