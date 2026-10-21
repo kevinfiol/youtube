@@ -42,3 +42,9 @@ steps:
         from_secret: PICO_KEY
       PICO_CERT_PUBKEY:
         from_secret: PICO_CERT_PUBKEY
+      YT_RANDOM_URL:
+        from_secret: YT_RANDOM_URL
+      YT_RANDOM_USER:
+        from_secret: YT_RANDOM_USER
+      YT_RANDOM_PASSWORD:
+        from_secret: YT_RANDOM_PASSWORD
