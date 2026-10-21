@@ -28,7 +28,6 @@ steps:
 
   - name: build site
     image: docker.io/node:24-alpine
-    dns: [ 1.1.1.1, 9.9.9.9 ]
     commands:
       - npm install -g pnpm@12
       - pnpm install --frozen-lockfile --prod
