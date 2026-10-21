@@ -19,13 +19,6 @@ labels:
   host: elster
 
 steps:
-  - name: dns-debug
-    image: docker.io/node:24-alpine
-    commands:
-      - cat /etc/resolv.conf
-      - nslookup registry.npmjs.org
-      - nslookup codeberg.org
-
   - name: build site
     image: docker.io/node:24-alpine
     commands:
