@@ -12,6 +12,7 @@ when:
       ]
   - event: cron
     cron: "auto-build"
+  - event: manual
 
 # use self-hosted agent
 labels:
