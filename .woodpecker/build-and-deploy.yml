@@ -21,6 +21,7 @@ labels:
 steps:
   - name: build site
     image: docker.io/node:24-alpine
+    commands:
       - npm install -g pnpm@12
       - pnpm install --frozen-lockfile --prod
       - pnpm build
